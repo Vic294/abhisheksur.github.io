@@ -1,61 +1,46 @@
-# Abhishek Sur - Personal Portfolio Website
+# Abhishek Sur's Personal Website
 
-A modern, responsive personal portfolio website for Abhishek Sur that showcases professional experience, academic achievements, and technical expertise through an interactive and engaging web interface.
+A modern, responsive personal portfolio website showcasing Abhishek Sur's professional journey, academic achievements, and leadership experience.
 
 ## Features
 
-- Responsive design that works on mobile, tablet, and desktop
-- Modern React.js frontend with interactive elements
-- Tailwind CSS styling for a clean, professional look
-- Content sections highlighting education, work experience, and skills
-- Optimized for fast loading and SEO performance
+- **Sleek, Minimalist Design**: Clean layout with elegant typography focused on content
+- **Mobile-First Responsive Design**: Optimized for all devices
+- **SEO Optimization**: Proper meta tags and structured data
+- **Fast Performance**: Optimized assets and code for quick loading
+- **Blog Section**: Showcasing thought leadership content
+- **Contact Form**: Easy way to get in touch
 
-## Tech Stack
+## Technologies Used
 
-- React.js frontend with Vite configuration
-- TypeScript for type-safe development
-- Tailwind CSS for responsive styling
-- DaisyUI components for enhanced UI elements
-- FontAwesome icons for visual elements
-
-## Project Structure
-
-```
-├── src/              # Source code
-│   ├── assets/       # Static assets
-│   ├── components/   # Reusable UI components
-│   ├── App.jsx       # Main application component
-│   ├── index.css     # Global styles
-│   └── main.jsx      # Application entry point
-├── public/           # Public assets
-├── dist/             # Production build output
-└── attached_assets/  # Original assets for the project
-```
-
-## Development
-
-To start the development server:
-
-```bash
-./dev.sh
-```
+- **Frontend**: React.js with TypeScript
+- **Styling**: Tailwind CSS
+- **Build Tool**: Vite
+- **Deployment**: GitHub Pages
 
 ## Deployment
 
-To build and deploy the website:
+The website is deployed to GitHub Pages and available at:
+https://vic294.github.io/abhisheksur.github.io/
 
-```bash
-./deploy.sh
-```
+For deployment instructions, see [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md).
 
-This will guide you through the deployment process with options for:
-1. Manual deployment to GitHub Pages
-2. Automatic deployment (with proper GitHub token permissions)
+## Development
 
-See `DEPLOYMENT_GUIDE.md` for detailed deployment instructions.
+To run this project locally:
 
-## Scripts
+1. Clone the repository
+2. Install dependencies with `npm install`
+3. Start the development server with `npm run dev`
 
-- `build.sh` - Builds the website and creates a deployment package
-- `dev.sh` - Starts the development server
-- `deploy.sh` - Interactive deployment tool
+## Updating Content
+
+To update website content:
+
+1. Edit relevant files in the codebase
+2. Test changes locally
+3. Deploy using the provided scripts in the project
+
+## License
+
+This project is proprietary and not licensed for public use or distribution.
