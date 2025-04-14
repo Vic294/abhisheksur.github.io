@@ -3,10 +3,10 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 
 // GitHub Pages deployment requires the base path to match the repository name
-// For a user site like username.github.io, we can use '/'
+// Since this is a project site (username.github.io/repository), we need to specify the repo name
 export default defineConfig({
   plugins: [react()],
-  base: './',  // Using relative paths for better compatibility
+  base: '/abhisheksur.github.io/',  // Match the repository name exactly
   build: {
     outDir: 'dist',
     emptyOutDir: true,
