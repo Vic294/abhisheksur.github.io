@@ -13,7 +13,7 @@ jobs:
     
     # Set environment variables
     env:
-      REACT_APP_BASE_URL: https://vic294.github.io
+      REACT_APP_BASE_URL: https://abhisheksur.github.io
       
     steps:
       - name: Checkout 🛎️
@@ -40,7 +40,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: dist
-          repository-name: Vic294/Vic294.github.io
+          repository-name: Vic294/abhisheksur.github.io
           branch: main
           token: ${{ secrets.GITHUB_TOKEN }}
           clean: true

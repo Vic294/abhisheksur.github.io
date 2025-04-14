@@ -47,7 +47,7 @@ git add .
 COMMIT_MESSAGE="Deployment: $(date)"
 git commit -m "$COMMIT_MESSAGE"
 git branch -M main
-git remote add origin https://github.com/Vic294/Vic294.github.io.git
+git remote add origin https://github.com/Vic294/abhisheksur.github.io.git
 git push -f origin main
 
 # Clean up
@@ -55,5 +55,5 @@ cd ..
 rm -rf .deploy_temp
 
 echo "✅ Deployment completed successfully!"
-echo "Your website should be available at https://vic294.github.io/"
+echo "Your website should be available at https://abhisheksur.github.io/"
 echo "Note: It may take a few minutes for changes to appear online."

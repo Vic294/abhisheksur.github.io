@@ -8,7 +8,7 @@ This website is automatically deployed to GitHub Pages whenever changes are push
 
 ### Deployment URLs
 
-- Live website: [https://vic294.github.io](https://vic294.github.io)
+- Live website: [https://abhisheksur.github.io](https://abhisheksur.github.io)
 
 ### Manual Deployment
 
@@ -30,7 +30,7 @@ The project is configured with GitHub Actions for continuous integration and dep
 ### Repository Structure
 
 - `main` branch: Contains the source code
-- GitHub Pages: Serves the built website from the main branch of the [Vic294.github.io](https://github.com/Vic294/Vic294.github.io) repository
+- GitHub Pages: Serves the built website from the main branch of the [abhisheksur.github.io](https://github.com/Vic294/abhisheksur.github.io) repository
 
 ## Local Development
 
