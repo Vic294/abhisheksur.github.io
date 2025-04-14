@@ -1,3 +1,23 @@
+# Deployment Guide for GitHub Pages
+
+This repository is configured for deployment on GitHub Pages. To deploy your changes:
+
+1. Make sure all your changes are committed to the `main` branch
+2. Go to the GitHub repository settings
+3. Navigate to the Pages section
+4. Set the build source to "GitHub Actions"
+5. Wait for GitHub to build and deploy your site
+
+Your site will be available at https://abhisheksur.github.io/
+
+## Setting Up GitHub Actions (Optional)
+
+If you want to use GitHub Actions for a more automated deployment, you can add a workflow file:
+
+1. Create a `.github/workflows/deploy.yml` file in your repository
+2. Copy the following content to the file:
+
+```yaml
 name: Deploy to GitHub Pages
 
 on:
@@ -52,3 +72,6 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
+```
+
+Note: To add this workflow, you'll need a GitHub token with workflow scope or need to manually add this file through the GitHub web interface.
