@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===================================================
-# Automated GitHub Pages Deployment Script for Vic294
+# Automated GitHub Pages Deployment Script for Abhishek Sur
 # ===================================================
 
 echo "📦 Starting deployment process..."
@@ -39,16 +39,16 @@ mkdir -p .deploy_temp
 cp -r dist/* .deploy_temp/
 cp dist/.nojekyll .deploy_temp/
 
-# Deploy to main branch (since we're using the main branch for GitHub Pages)
-echo "🚀 Pushing to GitHub..."
+# Deploy to gh-pages branch
+echo "🚀 Pushing to GitHub gh-pages branch..."
 cd .deploy_temp
 git init
 git add .
 COMMIT_MESSAGE="Deployment: $(date)"
 git commit -m "$COMMIT_MESSAGE"
-git branch -M main
-git remote add origin https://github.com/Vic294/abhisheksur.github.io.git
-git push -f origin main
+git branch -M gh-pages
+git remote add origin https://github.com/abhisheksur/abhisheksur.github.io.git
+git push -f origin gh-pages
 
 # Clean up
 cd ..

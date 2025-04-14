@@ -1,63 +1,78 @@
-# Abhishek Sur - Personal Portfolio
+# Abhishek Sur - Personal Portfolio Website
 
-A modern, responsive personal portfolio website showcasing Abhishek Sur's professional experience, academic achievements, and technical expertise.
+A modern, professional portfolio website for Abhishek Sur showcasing his career journey, academic excellence, and professional accomplishments.
 
-## Deployment
+## 🌟 Features
 
-This website is automatically deployed to GitHub Pages whenever changes are pushed to the main branch.
+- **Responsive Design**: Optimized for all device sizes from mobile to desktop
+- **Professional Layout**: Minimalist, elegant design that appeals to academic and business professionals
+- **Interactive Sections**: Showcases experience, education, skills, and certifications
+- **Contact Form**: Simple contact mechanism that opens the user's email client
+- **Blog Integration**: Platform for sharing thought leadership content
+- **SEO Optimized**: Structured for strong search engine visibility
 
-### Deployment URLs
+## 🚀 Technology Stack
 
-- Live website: [https://abhisheksur.github.io](https://abhisheksur.github.io)
+- **React**: Frontend library for building the user interface
+- **Tailwind CSS**: Utility-first CSS framework for styling
+- **React Router**: For seamless navigation between pages
+- **Font Awesome**: For icons and visual elements
+- **Vite**: Build tool and development server
 
-### GitHub Actions Deployment
+## 📋 Site Structure
 
-The project is configured with GitHub Actions for continuous integration and deployment:
+- **Home/Hero**: Introduces Abhishek and his core value proposition
+- **About**: Personal background, skills, and professional journey
+- **Experience**: Timeline of professional roles and achievements
+- **Education**: Academic credentials and specializations
+- **Certifications**: Professional certifications and continued learning
+- **Blog**: Thought leadership articles
+- **Contact**: Multiple ways to get in touch
 
-- Automatic deployments when changes are pushed to the main branch
-- The site is deployed to the `gh-pages` branch using GitHub Actions
-- Manual deployment option using the GitHub Actions interface
+## 🛠️ Installation and Setup
 
-### Manual Deployment
-
-If you need to manually deploy the website:
-
-1. Make sure you have access to the GitHub repository
-2. Run the build and deployment scripts:
+1. Clone the repository:
    ```
-   ./build.sh
-   ./deploy.sh
+   git clone https://github.com/abhisheksur/abhisheksur.github.io.git
    ```
 
-### Repository Structure
-
-- `main` branch: Contains the source code
-- `gh-pages` branch: Contains the built website deployed to GitHub Pages
-- GitHub Pages: Serves the built website from the `gh-pages` branch of the [abhisheksur.github.io](https://github.com/abhisheksur/abhisheksur.github.io) repository
-
-## Local Development
-
-1. Clone the repository
 2. Install dependencies:
    ```
    npm install
    ```
+
 3. Start the development server:
    ```
    npm run dev
    ```
 
-## Tech Stack
+4. Build for production:
+   ```
+   npm run build
+   ```
 
-- React.js frontend
-- Vite build system
-- Responsive design
-- Dynamic content rendering
+## 🚢 Deployment
 
-## GitHub Pages Configuration
+The site is configured for easy deployment to GitHub Pages. See the [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for detailed instructions.
 
-This portfolio is set up as a user site (username.github.io), which means:
+## 📁 Project Organization
 
-1. The repository name is `abhisheksur.github.io`
-2. The site is deployed to the `gh-pages` branch
-3. The site will be accessible at `https://abhisheksur.github.io/`
+```
+├── src/                  # Source files
+│   ├── components/       # Reusable UI components
+│   ├── pages/            # Page components
+│   ├── App.jsx           # Main application component
+│   └── main.jsx          # Application entry point
+├── attached_assets/      # Images and documents
+├── public/               # Static files
+├── index.html            # HTML template
+└── vite.config.js        # Vite configuration
+```
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 📬 Contact
+
+For questions or feedback about this portfolio, contact Abhishek Sur at abhisheksur429@gmail.com.

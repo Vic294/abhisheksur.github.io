@@ -6,7 +6,7 @@ import path from 'path';
 // For a user site like username.github.io, we can use '/'
 export default defineConfig({
   plugins: [react()],
-  base: '/',  // For user/organization site (username.github.io)
+  base: './',  // Using relative paths for better compatibility
   build: {
     outDir: 'dist',
     emptyOutDir: true,
