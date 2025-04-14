@@ -1,0 +1,47 @@
+name: Deploy Portfolio
+
+on:
+  push:
+    branches: [ main ]
+  
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    # Set environment variables
+    env:
+      REACT_APP_BASE_URL: https://vic294.github.io
+      
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js 🔧
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies 📦
+        run: npm ci || npm install
+        
+      - name: Build website 🏗️
+        run: npm run build
+      
+      - name: Create .nojekyll file 📄
+        run: touch dist/.nojekyll
+        
+      - name: Deploy to GitHub Pages 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          repository-name: Vic294/Vic294.github.io
+          branch: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+          clean: true
+          commit-message: "Deploy portfolio website - ${{ github.event.head_commit.message }}"
