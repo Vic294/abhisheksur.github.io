@@ -10,6 +10,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     # Set environment variables
     env:
@@ -18,8 +20,6 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
-        with:
-          persist-credentials: false
 
       - name: Setup Node.js 🔧
         uses: actions/setup-node@v3
@@ -37,11 +37,12 @@ jobs:
         run: touch dist/.nojekyll
         
       - name: Deploy to GitHub Pages 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          folder: dist
-          repository-name: Vic294/abhisheksur.github.io
-          branch: main
-          token: ${{ secrets.GITHUB_TOKEN }}
-          clean: true
-          commit-message: "Deploy portfolio website - ${{ github.event.head_commit.message }}"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          force_orphan: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: "Deploy portfolio website - ${{ github.event.head_commit.message }}"
