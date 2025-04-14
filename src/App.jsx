@@ -4,9 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinkedin, faInstagram } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope, faLocationDot, faFile, faGraduationCap, faBriefcase, faChartLine, faLaptopCode } from '@fortawesome/free-solid-svg-icons'
 
-// Import assets
-import headshot from '../attached_assets/Headshot (1).jpeg'
-import resume from '../attached_assets/AbhishekSur-Resume.pdf'
+// Import assets from local path
+import headshot from './assets/image_1744639604456.png'
 
 // Pages
 const Home = () => (
@@ -289,7 +288,7 @@ const ExperienceSection = () => (
       </div>
       
       <div className="mt-16 text-center">
-        <a href={resume} target="_blank" className="inline-flex items-center bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-md transition-colors">
+        <a href="./AbhishekSur-Resume.pdf" target="_blank" className="inline-flex items-center bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-md transition-colors">
           <FontAwesomeIcon icon={faFile} className="mr-2" />
           Download Resume
         </a>
