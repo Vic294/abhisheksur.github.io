@@ -288,7 +288,7 @@ const ExperienceSection = () => (
       </div>
       
       <div className="mt-16 text-center">
-        <a href="./AbhishekSur-Resume.pdf" target="_blank" className="inline-flex items-center bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-md transition-colors">
+        <a href="#" onClick={(e) => {e.preventDefault(); alert('Resume download will be available soon.')}} className="inline-flex items-center bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-md transition-colors">
           <FontAwesomeIcon icon={faFile} className="mr-2" />
           Download Resume
         </a>

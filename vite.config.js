@@ -11,11 +11,17 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     sourcemap: false,
+    // Ensure assets are properly handled
+    assetsInlineLimit: 0,
+    // Copy files from public directory to output directory
+    copyPublicDir: true,
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@assets': path.resolve(__dirname, './attached_assets'),
+      '@assets': path.resolve(__dirname, './src/assets'),
     },
   },
+  // Properly configure public directory
+  publicDir: 'public',
 });
