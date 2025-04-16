@@ -1,0 +1,15 @@
+{
+  "name": "abhisheksur-portfolio",
+  "version": "1.0.0",
+  "description": "Abhishek Sur's Professional Portfolio Website",
+  "main": "replit-server.js",
+  "scripts": {
+    "start": "node replit-server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
