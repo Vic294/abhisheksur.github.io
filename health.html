@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Check Status</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .success {
+      color: green;
+      background-color: #e6ffe6;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .failure {
+      color: red;
+      background-color: #ffe6e6;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    code {
+      background-color: #f5f5f5;
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Health Check Status</h1>
+  <div id="root-status">Checking root health...</div>
+  <div id="health-status">Checking /health endpoint...</div>
+  
+  <h2>Debug Information</h2>
+  <pre id="debug-info">Gathering information...</pre>
+
+  <script>
+    async function checkRoot() {
+      try {
+        const response = await fetch('/?health=true');
+        if (response.ok) {
+          document.getElementById('root-status').innerHTML = 
+            '<div class="success">✅ Root health check successful!</div>';
+        } else {
+          document.getElementById('root-status').innerHTML = 
+            '<div class="failure">❌ Root health check failed: ' + response.status + '</div>';
+        }
+        return response;
+      } catch (error) {
+        document.getElementById('root-status').innerHTML = 
+          '<div class="failure">❌ Root health check error: ' + error.message + '</div>';
+        return null;
+      }
+    }
+
+    async function checkHealthEndpoint() {
+      try {
+        const response = await fetch('/health');
+        if (response.ok) {
+          document.getElementById('health-status').innerHTML = 
+            '<div class="success">✅ /health endpoint check successful!</div>';
+        } else {
+          document.getElementById('health-status').innerHTML = 
+            '<div class="failure">❌ /health endpoint check failed: ' + response.status + '</div>';
+        }
+        return response;
+      } catch (error) {
+        document.getElementById('health-status').innerHTML = 
+          '<div class="failure">❌ /health endpoint error: ' + error.message + '</div>';
+        return null;
+      }
+    }
+
+    async function gatherDebugInfo() {
+      const info = {
+        url: window.location.href,
+        date: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        rootResponse: null,
+        healthResponse: null
+      };
+
+      try {
+        const rootResponse = await fetch('/?health=true');
+        info.rootResponse = {
+          status: rootResponse.status,
+          text: await rootResponse.text()
+        };
+      } catch (error) {
+        info.rootResponse = {error: error.message};
+      }
+
+      try {
+        const healthResponse = await fetch('/health');
+        info.healthResponse = {
+          status: healthResponse.status,
+          text: await healthResponse.text()
+        };
+      } catch (error) {
+        info.healthResponse = {error: error.message};
+      }
+
+      document.getElementById('debug-info').textContent = JSON.stringify(info, null, 2);
+    }
+
+    // Run all checks
+    checkRoot();
+    checkHealthEndpoint();
+    gatherDebugInfo();
+  </script>
+</body>
+</html>

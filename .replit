@@ -4,13 +4,16 @@ modules = ["nodejs-20"]
 channel = "stable-24_05"
 
 [[ports]]
+localPort = 80
+externalPort = 3001
+
+[[ports]]
 localPort = 3000
 externalPort = 3000
 
 [[ports]]
 localPort = 5000
 externalPort = 80
-exposeLocalhost = true
 
 [deployment]
 run = ["sh", "-c", "node server.js"]

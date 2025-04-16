@@ -1,46 +1,56 @@
-# Abhishek Sur's Personal Website
+# Abhishek Sur Portfolio Website
 
-A modern, responsive personal portfolio website showcasing Abhishek Sur's professional journey, academic achievements, and leadership experience.
+This repository contains the personal portfolio website for Abhishek Sur, an MBA (XLRI Jamshedpur) and B.Tech (NIT Durgapur) graduate with leadership experience in supply chain strategy, finance, and wealth management.
 
-## Features
+## Deployment Instructions
 
-- **Sleek, Minimalist Design**: Clean layout with elegant typography focused on content
-- **Mobile-First Responsive Design**: Optimized for all devices
-- **SEO Optimization**: Proper meta tags and structured data
-- **Fast Performance**: Optimized assets and code for quick loading
-- **Blog Section**: Showcasing thought leadership content
-- **Contact Form**: Easy way to get in touch
+### Option 1: Deploy on Replit
 
-## Technologies Used
+1. Click the **Run** button in Replit to start the server
+2. For manual deployment, use the "Deploy" button in Replit
 
-- **Frontend**: React.js with TypeScript
-- **Styling**: Tailwind CSS
-- **Build Tool**: Vite
-- **Deployment**: GitHub Pages
+The website is configured to automatically handle Replit's health checks by:
+- Responding to the root path `/` with a 200 OK status and `text/plain` content type
+- Serving the main website content at `/index.html`
 
-## Deployment
+### Option 2: Manual Deployment
 
-The website is deployed to GitHub Pages and available at:
-https://vic294.github.io/abhisheksur.github.io/
+For deployment on other platforms:
 
-For deployment instructions, see [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md).
+1. Run the build script: `node simple-build.js`
+2. This will create a `dist` directory with all required files
+3. Deploy the contents of the `dist` directory
+4. Make sure the server is started with: `node index.js` or `node server.js`
+5. Alternatively, you can use the zipped deployment package: `abhisheksur-website-deploy.zip`
 
-## Development
+### Development
 
-To run this project locally:
+To run the server locally:
 
-1. Clone the repository
-2. Install dependencies with `npm install`
-3. Start the development server with `npm run dev`
+```bash
+./run-server.sh
+```
 
-## Updating Content
+This will start the server on port 5000 (or the value of the PORT environment variable).
 
-To update website content:
+## Health Check Verification
 
-1. Edit relevant files in the codebase
-2. Test changes locally
-3. Deploy using the provided scripts in the project
+To verify that the health check is working properly:
 
-## License
+1. Start the server
+2. Access the health check page at: `/health.html`
+3. This tool will test both the root path and the dedicated health endpoint
 
-This project is proprietary and not licensed for public use or distribution.
+## Key Features
+
+- Resume download in both PDF and DOCX formats
+- Blog with thought leadership content, including research on AI and blockchain in life insurance
+- Responsive design for all devices
+- Optimized server configuration for reliable hosting
+
+## Directory Structure
+
+- `simple-server.js` - The production server optimized for deployment
+- `index.js` - The entry point that loads the server
+- `health.html` - A tool to verify the health check functionality
+- `simple-build.js` - Script to build the deployment package
