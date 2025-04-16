@@ -4,38 +4,21 @@
  */
 
 const http = require('http');
+const PORT = process.env.PORT || 5000;
 
-// Create the most basic HTTP server possible
+// Create HTTP server
 const server = http.createServer((req, res) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-  
-  // Handle ONLY the root path
-  if (req.url === '/' || req.url === '/health') {
-    // Set plain text content type
-    res.setHeader('Content-Type', 'text/plain');
-    // Set 200 status code
-    res.statusCode = 200;
-    // Send the response
+  // Only respond to the root path
+  if (req.url === '/' || req.url === '') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('OK');
-    console.log('Health check responded with 200 OK');
   } else {
-    // For any other path, serve a redirect to index.html
-    res.setHeader('Location', '/index.html');
-    res.statusCode = 302;
+    res.writeHead(404);
     res.end();
   }
 });
 
-// Listen on port 5000
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`
-========================================================
-  ULTRA-MINIMAL HEALTH CHECK SERVER
-========================================================
-  Port: ${PORT}
-  Health check URL: http://localhost:${PORT}/
-  Response: "OK" with Content-Type: text/plain
-========================================================
-`);
+// Start server
+server.listen(PORT, () => {
+  console.log(`Health check server running at http://0.0.0.0:${PORT}/`);
 });

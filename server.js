@@ -1,78 +1,128 @@
 /**
- * ULTRA-SIMPLE SERVER.JS FOR REPLIT DEPLOYMENT
+ * REPLIT DEPLOYMENT-READY SERVER
  * 
- * This file MUST be at the root level of your Replit project
- * and MUST handle health checks at the root path.
+ * This server is designed to work with Replit's deployment requirements:
+ * 1. Returns "OK" at the root path for health checks
+ * 2. Serves static files from the current directory
+ * 3. Handles both development (port 3000) and production (port 5000) environments
  */
 
-// Use built-in Node.js HTTP module for maximum compatibility
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
+// Define the port: use environment PORT or default to 3000
+const PORT = process.env.PORT || 3000;
+
+// MIME type mapping
+const mimeTypes = {
+  '.html': 'text/html',
+  '.css': 'text/css',
+  '.js': 'text/javascript',
+  '.json': 'application/json',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon',
+  '.pdf': 'application/pdf',
+  '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+};
+
 // Create HTTP server
 const server = http.createServer((req, res) => {
-  console.log(`Request: ${req.method} ${req.url}`);
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
   
-  // PRIORITY: Handle root path for health checks
-  if (req.url === '/' || req.url === '/health') {
-    console.log('Health check request received');
-    res.writeHead(200, {'Content-Type': 'text/plain'});
+  // Handle root path for health checks
+  // Special case for Replit health checks - they expect a plain text "OK" response
+  if ((req.url === '/' || req.url === '') && req.headers['user-agent'] && req.headers['user-agent'].includes('Replit')) {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('OK');
     return;
   }
   
-  // For all other requests, try to serve static files
-  let filePath = req.url;
-  
-  // Default to index.html
-  if (filePath === '/') {
-    filePath = '/index.html';
+  // For normal visitors to the root path, serve the index.html file
+  if (req.url === '/' || req.url === '') {
+    fs.readFile('./index.html', (error, content) => {
+      if (error) {
+        res.writeHead(500, { 'Content-Type': 'text/html' });
+        res.end('Error loading index.html');
+      } else {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(content, 'utf-8');
+      }
+    });
+    return;
   }
   
-  // Get absolute path
-  filePath = path.join(__dirname, filePath);
+  // Redirect /index.html requests to / for cleaner URLs
+  if (req.url === '/index.html') {
+    res.writeHead(302, { 'Location': '/' });
+    res.end();
+    return;
+  }
   
-  // Handle static files
-  try {
-    if (fs.existsSync(filePath)) {
-      const content = fs.readFileSync(filePath);
-      const ext = path.extname(filePath);
-      
-      // Set content type based on file extension
-      let contentType = 'text/html';
-      if (ext === '.css') contentType = 'text/css';
-      if (ext === '.js') contentType = 'application/javascript';
-      if (ext === '.json') contentType = 'application/json';
-      if (ext === '.png') contentType = 'image/png';
-      if (ext === '.jpg' || ext === '.jpeg') contentType = 'image/jpeg';
-      if (ext === '.pdf') contentType = 'application/pdf';
-      if (ext === '.docx') contentType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-      
-      res.writeHead(200, {'Content-Type': contentType});
-      res.end(content);
+  // Determine file path
+  let filePath = '.' + req.url;
+  if (filePath === './') {
+    filePath = './index.html';
+  }
+  
+  // Get file extension to determine content type
+  const extname = path.extname(filePath).toLowerCase();
+  const contentType = mimeTypes[extname] || 'application/octet-stream';
+  
+  // Read and serve the file
+  fs.readFile(filePath, (error, content) => {
+    if (error) {
+      if (error.code === 'ENOENT') {
+        // File not found, try to serve index.html
+        fs.readFile('./index.html', (err, indexContent) => {
+          if (err) {
+            // Cannot even serve index.html, return 404
+            res.writeHead(404, { 'Content-Type': 'text/html' });
+            res.end('404 Not Found');
+          } else {
+            // Serve index.html as fallback
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(indexContent, 'utf-8');
+          }
+        });
+      } else {
+        // Server error
+        res.writeHead(500, { 'Content-Type': 'text/html' });
+        res.end(`Server Error: ${error.code}`);
+      }
     } else {
-      // File not found, redirect to index.html
-      res.writeHead(302, {'Location': '/index.html'});
-      res.end();
+      // Success - serve the file
+      res.writeHead(200, { 'Content-Type': contentType });
+      res.end(content, 'utf-8');
     }
-  } catch (error) {
-    console.error('Error serving file:', error);
-    res.writeHead(500);
-    res.end('Internal Server Error');
+  });
+});
+
+// Start server
+server.listen(PORT, () => {
+  console.log(`Server running at http://0.0.0.0:${PORT}/`);
+  console.log(`Server mode: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`Health check endpoint: http://0.0.0.0:${PORT}/ (responds with "OK")`);
+});
+
+// Handle server errors
+server.on('error', (error) => {
+  console.error(`Server error: ${error.message}`);
+  if (error.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use. Try a different port.`);
+    process.exit(1);
   }
 });
 
-// CRITICAL: Listen on port 5000
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`
-=======================================================
-  SERVER RUNNING ON PORT ${PORT}
-=======================================================
-  - Root path (/) responding with "OK" for health checks
-  - All website content being served from static files
-  - Using pure Node.js HTTP server for maximum compatibility
-=======================================================
-  `);
+// Handle process termination
+process.on('SIGINT', () => {
+  console.log('Server shutting down...');
+  server.close(() => {
+    console.log('Server closed');
+    process.exit(0);
+  });
 });

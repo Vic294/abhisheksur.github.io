@@ -1,78 +1,103 @@
 /**
- * ULTRA-SIMPLE INDEX.JS FOR REPLIT DEPLOYMENT
+ * REPLIT DEPLOYMENT SERVER - HEALTH CHECK PRIORITY
  * 
- * This file is identical to server.js and serves as a fallback
- * in case Replit looks for index.js instead of server.js
+ * This server always returns "OK" for the root path (/) to ensure
+ * Replit health checks always succeed, regardless of user agent.
+ * The website is accessible at /index.html instead.
  */
 
-// Use built-in Node.js HTTP module for maximum compatibility
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
+// Define the port: use environment PORT or default to 5000
+const PORT = process.env.PORT || 5000;
+
+// MIME type mapping
+const mimeTypes = {
+  '.html': 'text/html',
+  '.css': 'text/css',
+  '.js': 'text/javascript',
+  '.json': 'application/json',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon',
+  '.pdf': 'application/pdf',
+  '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+};
+
 // Create HTTP server
 const server = http.createServer((req, res) => {
-  console.log(`Request: ${req.method} ${req.url}`);
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
   
-  // PRIORITY: Handle root path for health checks
-  if (req.url === '/' || req.url === '/health') {
-    console.log('Health check request received');
-    res.writeHead(200, {'Content-Type': 'text/plain'});
+  // ALWAYS handle root path as a health check for maximum reliability
+  if (req.url === '/' || req.url === '') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('OK');
     return;
   }
   
-  // For all other requests, try to serve static files
-  let filePath = req.url;
+  // Determine file path
+  let filePath = '.' + req.url;
   
-  // Default to index.html
-  if (filePath === '/') {
-    filePath = '/index.html';
-  }
+  // Get file extension to determine content type
+  const extname = path.extname(filePath).toLowerCase();
+  const contentType = mimeTypes[extname] || 'application/octet-stream';
   
-  // Get absolute path
-  filePath = path.join(__dirname, filePath);
-  
-  // Handle static files
-  try {
-    if (fs.existsSync(filePath)) {
-      const content = fs.readFileSync(filePath);
-      const ext = path.extname(filePath);
-      
-      // Set content type based on file extension
-      let contentType = 'text/html';
-      if (ext === '.css') contentType = 'text/css';
-      if (ext === '.js') contentType = 'application/javascript';
-      if (ext === '.json') contentType = 'application/json';
-      if (ext === '.png') contentType = 'image/png';
-      if (ext === '.jpg' || ext === '.jpeg') contentType = 'image/jpeg';
-      if (ext === '.pdf') contentType = 'application/pdf';
-      if (ext === '.docx') contentType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-      
-      res.writeHead(200, {'Content-Type': contentType});
-      res.end(content);
+  // Read and serve the file
+  fs.readFile(filePath, (error, content) => {
+    if (error) {
+      if (error.code === 'ENOENT') {
+        // File not found, try to serve index.html
+        fs.readFile('./index.html', (err, indexContent) => {
+          if (err) {
+            // Cannot even serve index.html, return 404
+            res.writeHead(404, { 'Content-Type': 'text/html' });
+            res.end('404 Not Found');
+          } else {
+            // Serve index.html as fallback
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(indexContent, 'utf-8');
+          }
+        });
+      } else {
+        // Server error
+        res.writeHead(500, { 'Content-Type': 'text/html' });
+        res.end(`Server Error: ${error.code}`);
+      }
     } else {
-      // File not found, redirect to index.html
-      res.writeHead(302, {'Location': '/index.html'});
-      res.end();
+      // Success - serve the file
+      res.writeHead(200, { 'Content-Type': contentType });
+      res.end(content, 'utf-8');
     }
-  } catch (error) {
-    console.error('Error serving file:', error);
-    res.writeHead(500);
-    res.end('Internal Server Error');
+  });
+});
+
+// Start server
+server.listen(PORT, () => {
+  console.log(`Server running at http://0.0.0.0:${PORT}/`);
+  console.log(`Server mode: ${process.env.NODE_ENV || 'production'}`);
+  console.log(`Health check endpoint: http://0.0.0.0:${PORT}/ (responds with "OK")`);
+  console.log(`Website available at: http://0.0.0.0:${PORT}/index.html`);
+});
+
+// Handle server errors
+server.on('error', (error) => {
+  console.error(`Server error: ${error.message}`);
+  if (error.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use. Try a different port.`);
+    process.exit(1);
   }
 });
 
-// CRITICAL: Listen on port 5000
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`
-=======================================================
-  SERVER RUNNING ON PORT ${PORT}
-=======================================================
-  - Root path (/) responding with "OK" for health checks
-  - All website content being served from static files
-  - Using pure Node.js HTTP server for maximum compatibility
-=======================================================
-  `);
+// Handle process termination
+process.on('SIGINT', () => {
+  console.log('Server shutting down...');
+  server.close(() => {
+    console.log('Server closed');
+    process.exit(0);
+  });
 });
