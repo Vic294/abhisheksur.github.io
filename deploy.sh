@@ -1,8 +1,13 @@
 #!/bin/bash
-# Final deployment script for Replit
+# Ultra-Simple Deployment Script for Replit
 
 echo "Starting Abhishek Sur Portfolio website deployment..."
 echo "Using PORT: $PORT"
+echo "Using ultra-simple server for maximum compatibility with Replit"
 
-# Run the final deployment server which handles both health checks and static files
-node final-deploy.js
+# Run the ultra-simple server first to verify deployment works
+node replit-deploy.js
+
+# Once deployment is working with the ultra-simple server,
+# you can switch to the full server by uncommenting this line:
+# node final-deploy.js
