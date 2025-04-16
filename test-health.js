@@ -1,14 +1,14 @@
-// Test script to verify health check response
+// Test script to verify health check response for Replit deployment
 const http = require('http');
 
 // Test local server health check response
 function testHealthCheck() {
   console.log('Testing health check response...');
   
-  // Create a request to the root path
+  // Create a request to the root path - IMPORTANT: Use PORT 5000 for Replit
   const options = {
     hostname: 'localhost',
-    port: 3000,
+    port: 5000,
     path: '/',
     method: 'GET',
     headers: {
@@ -22,9 +22,10 @@ function testHealthCheck() {
     
     // Verify Content-Type
     if (res.headers['content-type'] !== 'text/plain') {
-      console.error('ERROR: Content-Type must be text/plain');
+      console.error('❌ ERROR: Content-Type must be text/plain');
+      console.error('   Current Content-Type:', res.headers['content-type']);
     } else {
-      console.log('Content-Type check: PASSED');
+      console.log('✓ Content-Type check: PASSED');
     }
     
     // Check the body content
@@ -38,9 +39,10 @@ function testHealthCheck() {
       
       // Verify body is exactly "OK"
       if (body !== 'OK') {
-        console.error('ERROR: Response body must be exactly "OK"');
+        console.error('❌ ERROR: Response body must be exactly "OK"');
+        console.error(`   Current body: "${body}"`);
       } else {
-        console.log('Body content check: PASSED');
+        console.log('✓ Body content check: PASSED');
       }
       
       console.log('Health check test completed.');
@@ -49,7 +51,8 @@ function testHealthCheck() {
   });
   
   req.on('error', (e) => {
-    console.error(`TEST ERROR: ${e.message}`);
+    console.error(`❌ TEST ERROR: ${e.message}`);
+    console.error('   Make sure your server is running on port 5000');
     process.exit(1);
   });
   
@@ -57,18 +60,26 @@ function testHealthCheck() {
 }
 
 // Start a test server for 3 seconds, then run the health check test
-console.log('Starting a test server...');
+console.log('Starting a test server on port 5000 (required by Replit)...');
 
 // Create the test server
 const server = http.createServer((req, res) => {
   console.log(`Test server received: ${req.method} ${req.url}`);
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('OK');
+  
+  // Only respond with OK to the root path
+  if (req.url === '/' || req.url === '') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('OK');
+  } else {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Abhishek Sur - Portfolio Website');
+  }
 });
 
-// Start the server
-server.listen(3000, 'localhost', () => {
-  console.log('Test server running on port 3000');
+// Start the server on PORT 5000
+server.listen(5000, '0.0.0.0', () => {
+  console.log('Test server running on port 5000');
+  console.log('Testing exactly what Replit expects for deployment');
   
   // Run test after a short delay
   setTimeout(() => {
