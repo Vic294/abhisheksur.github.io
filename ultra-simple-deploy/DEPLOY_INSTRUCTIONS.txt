@@ -1,0 +1,13 @@
+ABHISHEK SUR PORTFOLIO - REPLIT DEPLOYMENT INSTRUCTIONS
+=====================================================
+
+QUICK SETUP:
+1. Set the Run command to: ./run
+2. Set environment variable: USE_ULTRA_SIMPLE=true
+3. Click Deploy
+
+FOR DETAILED INSTRUCTIONS:
+- See README.md and REPLIT_ULTRA_SIMPLE_DEPLOY.md
+
+TESTING THE SERVER:
+- Run: ./test-health-workflow.sh

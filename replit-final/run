@@ -1,0 +1,5 @@
+#!/bin/bash
+# Replit run script
+export PORT=${PORT:-5000}
+echo "Starting minimal Replit deployment server on port $PORT"
+exec node server.js

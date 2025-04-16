@@ -2,114 +2,120 @@
  * REPLIT DEPLOYMENT TEST
  * This script tests if the ultra-simple server can pass Replit's health checks
  */
+
 const http = require('http');
 
-// Test health check response
+// Use the PORT environment variable or default to 3000
+const PORT = process.env.PORT || 3000;
+
 function testHealthCheck() {
-  console.log('\nTESTING HEALTH CHECK RESPONSE...');
+  console.log(`\n🔍 Testing health check at http://localhost:${PORT}/...`);
   
   const options = {
     hostname: 'localhost',
-    port: 5000,
+    port: PORT,
     path: '/',
     method: 'GET',
     headers: {
-      'Accept': 'text/plain'
+      'User-Agent': 'Health-Check-Test/1.0',
     }
   };
   
   const req = http.request(options, (res) => {
-    console.log(`STATUS: ${res.statusCode}`);
-    console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
+    let data = '';
     
-    // Verify Content-Type
-    if (res.headers['content-type'] !== 'text/plain') {
-      console.error('❌ ERROR: Content-Type must be text/plain');
-      console.error(`   Current Content-Type: ${res.headers['content-type']}`);
-    } else {
-      console.log('✅ Content-Type check: PASSED');
-    }
-    
-    // Check the body content
-    let body = '';
     res.on('data', (chunk) => {
-      body += chunk;
+      data += chunk;
     });
     
     res.on('end', () => {
-      console.log(`BODY: "${body}"`);
+      console.log(`Status code: ${res.statusCode}`);
+      console.log(`Content-Type: ${res.headers['content-type']}`);
+      console.log(`Response body: "${data}"`);
       
-      // Verify body is exactly "OK"
-      if (body !== 'OK') {
-        console.error('❌ ERROR: Response body must be exactly "OK"');
-        console.error(`   Current body: "${body}"`);
-      } else {
-        console.log('✅ Body content check: PASSED');
+      // Verify requirements
+      let success = true;
+      
+      if (res.statusCode !== 200) {
+        console.log('❌ Failed: Status code must be 200');
+        success = false;
       }
       
-      console.log('\nHEALTH CHECK TEST COMPLETED');
+      if (res.headers['content-type'] !== 'text/plain') {
+        console.log('❌ Failed: Content-Type must be text/plain');
+        success = false;
+      }
       
-      // Test non-root path
+      if (data !== 'OK') {
+        console.log('❌ Failed: Response must be exactly "OK"');
+        success = false;
+      }
+      
+      if (success) {
+        console.log('✅ Health check passed! The server meets Replit\'s requirements.');
+      } else {
+        console.log('❌ Health check failed to meet Replit\'s requirements.');
+      }
+      
+      // Now test a non-root path
       testNonRootPath();
     });
   });
   
-  req.on('error', (e) => {
-    console.error(`❌ TEST ERROR: ${e.message}`);
-    process.exit(1);
+  req.on('error', (error) => {
+    console.error(`❌ Error: ${error.message}`);
+    console.log('Make sure the server is running on the correct port.');
   });
   
   req.end();
 }
 
-// Test non-root path
 function testNonRootPath() {
-  console.log('\nTESTING NON-ROOT PATH...');
+  console.log(`\n🔍 Testing a non-root path at http://localhost:${PORT}/some/path...`);
   
   const options = {
     hostname: 'localhost',
-    port: 5000,
-    path: '/test',
+    port: PORT,
+    path: '/some/path',
     method: 'GET'
   };
   
   const req = http.request(options, (res) => {
-    console.log(`STATUS: ${res.statusCode}`);
+    let data = '';
     
-    // Check the body content
-    let body = '';
     res.on('data', (chunk) => {
-      body += chunk;
+      data += chunk;
     });
     
     res.on('end', () => {
-      console.log(`BODY: "${body}"`);
-      console.log('\nNON-ROOT PATH TEST COMPLETED');
+      console.log(`Status code: ${res.statusCode}`);
+      console.log(`Content-Type: ${res.headers['content-type']}`);
+      console.log(`Response length: ${data.length} characters`);
+      console.log(`Response starts with: "${data.substring(0, 30)}${data.length > 30 ? '...' : ''}"`);
       
-      console.log('\n✅✅✅ ALL TESTS PASSED ✅✅✅');
-      console.log('Your server should work with Replit deployment!');
+      console.log('\n📋 SUMMARY:');
+      if (res.statusCode === 200) {
+        console.log('✅ Non-root path is handled.');
+      } else {
+        console.log('❓ Non-root path returned non-200 status code.');
+      }
       
-      // Exit after tests
-      process.exit(0);
+      console.log('\n🚀 FINAL VERDICT:');
+      console.log('The server should pass Replit\'s health checks if:');
+      console.log('1. The root path (/) returns "OK" with Content-Type: text/plain');
+      console.log('2. The server is listening on the PORT specified by Replit');
+      console.log('\nTo test yourself: curl -v http://localhost:' + PORT + '/');
     });
   });
   
-  req.on('error', (e) => {
-    console.error(`❌ TEST ERROR: ${e.message}`);
-    process.exit(1);
+  req.on('error', (error) => {
+    console.error(`❌ Error: ${error.message}`);
   });
   
   req.end();
 }
 
-// Start the ultra-simple server
-console.log('STARTING REPLIT DEPLOYMENT TEST');
-console.log('Starting server on port 5000...');
-
-// Load the actual server script
-require('./replit-deploy.js');
-
-// Wait for server to start
-setTimeout(() => {
-  testHealthCheck();
-}, 1000);
+// Start the tests
+console.log('🧪 TESTING REPLIT DEPLOYMENT COMPATIBILITY 🧪');
+console.log('This test checks if the server meets Replit\'s health check requirements.');
+testHealthCheck();

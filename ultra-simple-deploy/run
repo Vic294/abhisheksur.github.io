@@ -1,0 +1,26 @@
+#!/bin/bash
+# REPLIT DEPLOYMENT RUNNER
+# This script selects the best server for Replit deployment
+
+echo "Starting Abhishek Sur Portfolio Deployment..."
+
+# Check if we should use the ultra-simple server (RECOMMENDED)
+if [ "$USE_ULTRA_SIMPLE" = "true" ]; then
+  echo "Using ultra-simple server (maximum compatibility)"
+  exec ./ultra-simple-deploy.sh
+
+# Check if we should use the ultra-minimal server
+elif [ "$USE_ULTRA" = "true" ]; then
+  echo "Using ultra-minimal health check server"
+  exec ./ultra-deploy.sh
+
+# Check if we should use the Express server
+elif [ "$USE_EXPRESS" = "true" ]; then
+  echo "Using Express server"
+  exec ./express-deploy.sh
+
+# Otherwise use pure Node.js server
+else
+  echo "Using pure Node.js server"
+  exec ./pure-deploy.sh
+fi

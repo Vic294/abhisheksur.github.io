@@ -1,0 +1,6 @@
+#!/bin/bash
+# PURE HEALTH CHECK SERVER RUNNER
+export PORT=${PORT:-5000}
+echo "Starting Pure Health Check Server on port $PORT"
+echo "This server ONLY responds to health checks at the root path"
+node pure-health-server.js

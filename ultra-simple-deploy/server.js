@@ -1,14 +1,6 @@
-// ULTRA MINIMAL SERVER FOR REPLIT DEPLOYMENT
-// This does ONLY one thing - respond with "OK" to health checks
-// This is the absolute minimum required for a successful Replit deployment
+// Compatibility redirect to ultra-simple-server
+// This ensures any automated systems looking for server.js will find it
 
-const http = require('http');
-const PORT = process.env.PORT || 5000;
-
-http.createServer((req, res) => {
-  console.log(`${new Date().toISOString()}: ${req.method} ${req.url}`);
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('OK');
-}).listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-});
+console.log('Loading compatibility server.js');
+console.log('Redirecting to ultra-simple-server.js');
+require('./ultra-simple-server.js');

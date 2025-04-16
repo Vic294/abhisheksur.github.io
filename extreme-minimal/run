@@ -1,0 +1,20 @@
+#!/bin/bash
+# EXTREME MINIMAL RUN SCRIPT
+# Starts the minimal server with proper logging
+
+# Configure the port
+export PORT=${PORT:-5000}
+
+# Print environment information for debugging
+echo "=============== ENVIRONMENT INFO ==============="
+echo "Current directory: $(pwd)"
+echo "Files in directory:"
+ls -la
+echo "PORT: $PORT"
+echo "NODE_ENV: $NODE_ENV"
+echo "NODE_VERSION: $(node -v)"
+echo "==============================================="
+
+# Start the server
+echo "Starting extreme minimal health check server on port $PORT"
+exec node index.js

@@ -1,0 +1,5 @@
+#!/bin/bash
+# Pure health check server runner
+export PORT=${PORT:-5000}
+echo "Starting health check server on port $PORT"
+node server.js
