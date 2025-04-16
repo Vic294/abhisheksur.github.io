@@ -4,8 +4,8 @@ const fs = require('fs');
 
 // Create the server app
 const app = express();
-// CRITICAL: Replit expects port 3000, not 5000
-const PORT = process.env.PORT || 3000;
+// CRITICAL: Replit expects port 5000 for this application
+const PORT = process.env.PORT || 5000;
 
 // Logging middleware for debugging
 app.use((req, res, next) => {
@@ -42,6 +42,7 @@ ABHISHEK SUR PORTFOLIO DEPLOYMENT SERVER
 This server is optimized for Replit Deployment:
 - The root path (/) will always return 200 OK text/plain
 - Now listening on port ${PORT} (required by Replit)
+- External port: 80 (handled by Replit)
 - Website content is served from static files
 
 Test the server manually with:

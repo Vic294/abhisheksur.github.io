@@ -1,7 +1,14 @@
+/**
+ * REPLIT DEPLOYMENT BUILD PROCESS
+ * 
+ * This script builds the deployment package for Replit
+ * with a focus on ensuring health checks work properly.
+ */
+
 const fs = require('fs');
 const path = require('path');
 
-console.log('Starting Replit-optimized build process...');
+console.log('Starting Replit health-optimized build...');
 
 // Clean and create dist directory
 const distDir = path.join(__dirname, 'dist');
@@ -13,29 +20,35 @@ if (fs.existsSync(distDir)) {
 fs.mkdirSync(distDir, { recursive: true });
 console.log('Created dist directory');
 
-// Copy our ultra-minimal server files
+// Copy our health-optimized server as both index.js and server.js
+// This ensures the server will run regardless of which name Replit expects
 fs.copyFileSync(
-  path.join(__dirname, 'index.js'),
+  path.join(__dirname, 'replit-health-server.js'),
   path.join(distDir, 'index.js')
 );
-console.log('Copied index.js to dist directory');
+console.log('Copied replit-health-server.js as index.js');
 
 fs.copyFileSync(
-  path.join(__dirname, 'index.js'),
+  path.join(__dirname, 'replit-health-server.js'),
   path.join(distDir, 'server.js')
 );
-console.log('Copied index.js as server.js to dist directory');
+console.log('Copied replit-health-server.js as server.js');
+
+// Also include the minimal server as a fallback
+fs.copyFileSync(
+  path.join(__dirname, 'minimal-health-server.js'),
+  path.join(distDir, 'minimal-health-server.js')
+);
+console.log('Copied minimal-health-server.js');
 
 // Create a minimal package.json
 const packageJson = {
   "name": "abhishek-sur-portfolio",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node index.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2"
+    "start": "node server.js",
+    "minimal": "node minimal-health-server.js"
   }
 };
 
@@ -43,7 +56,7 @@ fs.writeFileSync(
   path.join(distDir, 'package.json'),
   JSON.stringify(packageJson, null, 2)
 );
-console.log('Created package.json in dist directory');
+console.log('Created package.json');
 
 // Copy HTML files
 const htmlFiles = ['index.html', 'blog.html', 'blog-post.html', 'blog-ai-blockchain.html'];
@@ -51,7 +64,7 @@ htmlFiles.forEach(file => {
   const sourcePath = path.join(__dirname, file);
   if (fs.existsSync(sourcePath)) {
     fs.copyFileSync(sourcePath, path.join(distDir, file));
-    console.log(`Copied ${file} to dist directory`);
+    console.log(`Copied ${file}`);
   } else {
     console.log(`Warning: ${file} not found, skipping`);
   }
@@ -63,7 +76,7 @@ resumeFiles.forEach(file => {
   const sourcePath = path.join(__dirname, file);
   if (fs.existsSync(sourcePath)) {
     fs.copyFileSync(sourcePath, path.join(distDir, file));
-    console.log(`Copied ${file} to dist directory`);
+    console.log(`Copied ${file}`);
   } else {
     console.log(`Warning: ${file} not found, skipping`);
   }
@@ -95,69 +108,51 @@ const copyDirectory = (source, target) => {
   
   if (fs.existsSync(source)) {
     copyDirectory(source, target);
-    console.log(`Copied ${dir} directory to dist`);
+    console.log(`Copied ${dir} directory`);
   } else {
     console.log(`Warning: ${dir} directory not found, skipping`);
   }
 });
 
-// Create a health-check test HTML file
-const healthCheckHtml = `<!DOCTYPE html>
-<html>
-<head>
-  <title>Health Check Passed</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 40px; text-align: center; }
-    .success { color: green; }
-    .message { border: 1px solid #ddd; padding: 20px; margin: 20px 0; }
-  </style>
-</head>
-<body>
-  <h1 class="success">✓ Health Check Passed</h1>
-  <div class="message">
-    <p>This means the server is correctly responding to health checks.</p>
-    <p>Go to <a href="index.html">the main page</a> to view the actual website.</p>
-  </div>
-  <hr>
-  <p>Abhishek Sur - Portfolio Website</p>
-</body>
-</html>`;
-
-fs.writeFileSync(path.join(distDir, 'health-check.html'), healthCheckHtml);
-console.log('Created health-check.html in dist directory');
-
-// Create a README for deployment instructions
+// Create deployment instructions
 const readmeContent = `# Abhishek Sur Portfolio - Replit Deployment
 
-## IMPORTANT DEPLOYMENT INSTRUCTIONS
+## IMPORTANT: Health Check Configuration
 
-This server is specifically optimized for Replit deployment:
+This package has been specifically designed to pass Replit health checks:
 
-1. The server MUST listen on port 5000 as required by Replit for this application
-2. The root path (/) MUST return a plain text "OK" response with status 200
-3. Do not modify the health check handling in index.js
+1. The server listens on port 5000
+2. The root path (/) returns a 200 OK with plain text "OK" response
+3. The server uses the pure Node.js http module to ensure maximum compatibility
 
-## How this works:
+## Deployment Options
 
-- The server first handles health checks at the root path (/)
-- After passing health checks, it serves the actual website content
-- To view the website, navigate to /index.html after deployment
-
-## Testing locally:
-
+### Standard Deployment
+Use the \`server.js\` file as your main entry point:
 \`\`\`
-node index.js
-curl http://localhost:5000/   # Should return "OK"
+node server.js
 \`\`\`
 
-## Deployment checks:
+### Fallback (Minimal) Deployment
+If the standard deployment fails health checks, try the minimal server:
+\`\`\`
+node minimal-health-server.js
+\`\`\`
 
-1. Verify port 5000 is used
-2. Verify root path returns text/plain "OK"
-3. Website content is at /index.html
+## Accessing the Website
+
+After deploying, the website content is available at:
+https://yourdomain.replit.app/index.html
+
+## Debugging
+
+If deployment still fails:
+1. Check Replit logs for specific errors
+2. Test the health check locally: \`curl http://localhost:5000/\`
+3. Try the minimal server as a last resort
 `;
 
 fs.writeFileSync(path.join(distDir, 'README.md'), readmeContent);
-console.log('Created README.md in dist directory');
+console.log('Created README.md');
 
-console.log('Replit-optimized build completed successfully!');
+console.log('Health-optimized build completed successfully!');
