@@ -1,7 +1,5 @@
 #!/bin/bash
-
-# Kill any existing node processes
-pkill -f "node server.js" || true
+# Simple script to run the server for Replit deployment
 
 # Run the server
-node server.js
+exec node server.js
