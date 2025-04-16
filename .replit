@@ -12,3 +12,15 @@ exposeLocalhost = true
 run = ["sh", "-c", "npm run preview"]
 deploymentTarget = "cloud_run"
 build = ["sh", "-c", "npm run build"]
+
+[workflows]
+runButton = "Start"
+
+[[workflows.workflow]]
+name = "Start"
+author = 37039831
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run preview"
