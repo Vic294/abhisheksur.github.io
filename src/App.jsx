@@ -27,36 +27,31 @@ const BlogPost = () => {
       </Link>
       <article className="prose lg:prose-xl max-w-4xl mx-auto">
         <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-          The Future of Supply Chain Management: Where Tech Meets Strategy
+          How AI and Blockchain Are Reshaping the Life Insurance Industry: My Doctoral Research Journey
         </h1>
-        <div className="text-gray-500 mb-8">April 14, 2025 • 8 min read</div>
+        <div className="text-gray-500 mb-8">April 15, 2025 • 6 min read</div>
         <p className="mb-4">
-          In today's rapidly evolving business landscape, supply chain management has undergone a significant transformation. 
-          No longer just about logistics and inventory, modern supply chain management sits at the intersection of 
-          technology, strategy, and operational excellence.
-        </p>
-        <h2 className="font-serif text-2xl md:text-3xl font-semibold mt-8 mb-4">Technology as a Game-Changer</h2>
-        <p className="mb-4">
-          With the advent of technologies like AI, blockchain, and IoT, companies are reimagining their supply chain 
-          operations. These technologies offer unprecedented visibility, traceability, and efficiency.
+          We often hear how AI and blockchain are transforming finance, but the insurance sector—particularly life insurance—has long been considered a slow mover in the digital revolution. My doctoral research seeks to change that narrative.
         </p>
         <p className="mb-4">
-          For instance, AI-powered demand forecasting has reduced inventory costs by up to 30% for some organizations, 
-          while blockchain has enhanced transparency and trust across supplier networks.
+          During my internship at Avendus Capital, I dove deep into India's life insurance space. I benchmarked top firms across 55 metrics, modeled valuation using regression logic, and uncovered a fascinating pattern: early adopters of digital tools were outperforming on both solvency and persistency metrics. That experience sparked a bigger question—what happens when we zoom out and look across countries?
         </p>
-        <h2 className="font-serif text-2xl md:text-3xl font-semibold mt-8 mb-4">Strategic Integration is Key</h2>
+        <h2 className="font-serif text-2xl md:text-3xl font-semibold mt-8 mb-4">Research Focus</h2>
         <p className="mb-4">
-          However, technology alone isn't the answer. The most successful companies integrate technology with strategic 
-          thinking, ensuring their supply chain initiatives align with broader business objectives.
+          My research explores how AI and blockchain adoption influence the valuation and competitive strategy of life insurance firms across emerging and developed economies. I combine innovation diffusion theory and valuation models (Damodaran-style!) to analyze how technology affects embedded value, solvency ratios, and profitability.
         </p>
+        <h2 className="font-serif text-2xl md:text-3xl font-semibold mt-8 mb-4">Methodology</h2>
         <p className="mb-4">
-          This integration requires cross-functional collaboration, a deep understanding of business dynamics, and 
-          a willingness to challenge traditional approaches.
+          Methodologically, I'll use a panel regression framework and construct adoption indices from firm disclosures and analyst reports. What excites me is not just the academic contribution, but how the results can help policymakers craft better tech regulations, and insurers rethink their digital playbooks.
         </p>
-        <h2 className="font-serif text-2xl md:text-3xl font-semibold mt-8 mb-4">Conclusion</h2>
+        <h2 className="font-serif text-2xl md:text-3xl font-semibold mt-8 mb-4">Personal Connection</h2>
         <p className="mb-4">
-          As we look to the future, supply chain management will continue to evolve. Those who can balance technological 
-          innovation with strategic thinking will not only survive but thrive in this new era.
+          This project is also deeply personal—it's a blend of strategy, technology, and finance, shaped by mentors who taught me to spot insights in unlikely places (like a "magic mirror" at a Raymond store!).
+        </p>
+        <h2 className="font-serif text-2xl md:text-3xl font-semibold mt-8 mb-4">Follow Along</h2>
+        <p className="mb-4">
+          Curious about the full proposal? Read it <a href="#" className="text-amber-500 hover:text-amber-600">here</a>.
+          And stay tuned as I blog this journey, from datasets to defense.
         </p>
       </article>
     </div>
@@ -288,7 +283,7 @@ const ExperienceSection = () => (
       </div>
       
       <div className="mt-16 text-center">
-        <a href="#" onClick={(e) => {e.preventDefault(); alert('Resume download will be available soon.')}} className="inline-flex items-center bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-md transition-colors">
+        <a href="/abhisheksur.github.io/AbhishekSur-Resume.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex items-center bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-md transition-colors">
           <FontAwesomeIcon icon={faFile} className="mr-2" />
           Download Resume
         </a>
