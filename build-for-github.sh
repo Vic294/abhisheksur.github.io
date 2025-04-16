@@ -10,30 +10,29 @@ if [ -z "$GITHUB_TOKEN" ]; then
   exit 1
 fi
 
-# First, ensure we copy all assets to src/assets
-echo "Step 1: Copying assets to src/assets directory..."
-mkdir -p src/assets
-cp -r ./attached_assets/* ./src/assets/
+# First copy the static HTML and blog files
+echo "Step 1: Preparing static HTML files..."
+cp index.html blog.html blog-post.html blog-ai-blockchain.html dist/
 
-# Copy Resume to public directory for direct access
-echo "Step 2: Ensuring public directory has necessary files..."
-mkdir -p public
-echo "Adding PDF files to public directory..."
-find ./attached_assets -name "*.pdf" -exec cp {} ./public/ \;
-
-# Make sure public assets get copied to the build
-echo "Step 3: Building the React application..."
-npm run build
-
-if [ $? -ne 0 ]; then
-  echo "❌ Build failed. Please check the errors above."
-  exit 1
+# Copy Resume and other assets
+echo "Step 2: Copying assets and resume..."
+mkdir -p dist/assets
+# If assets directory exists and has files, copy them
+if [ -d "./assets" ] && [ "$(ls -A ./assets 2>/dev/null)" ]; then
+  cp -r ./assets/* ./dist/assets/ || true
 fi
+# Copy directly from attached_assets
+if [ -d "./attached_assets" ]; then
+  cp -r ./attached_assets/* ./dist/assets/ || true
+fi
+cp AbhishekSur-Resume.pdf dist/
+cp AbhishekSur-Resume.docx dist/
 
-echo "✅ React application built successfully!"
+# Create a .nojekyll file to prevent GitHub from processing with Jekyll
+touch dist/.nojekyll
 
 # Create a temporary directory for the GitHub Pages branch
-echo "Step 4: Preparing the gh-pages branch..."
+echo "Step 3: Preparing the gh-pages branch..."
 
 # Create and move to a temp directory
 mkdir -p temp_deploy
@@ -62,7 +61,7 @@ REPO_URL="https://${GITHUB_TOKEN}@github.com/Vic294/abhisheksur.github.io.git"
 git remote add origin "$REPO_URL"
 
 # Force push to gh-pages branch
-echo "Step 5: Pushing to gh-pages branch..."
+echo "Step 4: Pushing to gh-pages branch..."
 git push -f origin gh-pages
 
 if [ $? -eq 0 ]; then
