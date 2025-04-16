@@ -1,78 +1,56 @@
-/**
- * ULTRA-SIMPLE INDEX.JS FOR REPLIT DEPLOYMENT
- * 
- * This file is identical to server.js and serves as a fallback
- * in case Replit looks for index.js instead of server.js
- */
-
-// Use built-in Node.js HTTP module for maximum compatibility
+// Replit deployment server (index.js)
 const http = require('http');
 const fs = require('fs');
-const path = require('path');
+
+// Use port 5000 for Replit deployment
+const PORT = process.env.PORT || 5000;
 
 // Create HTTP server
 const server = http.createServer((req, res) => {
-  console.log(`Request: ${req.method} ${req.url}`);
-  
-  // PRIORITY: Handle root path for health checks
-  if (req.url === '/' || req.url === '/health') {
-    console.log('Health check request received');
-    res.writeHead(200, {'Content-Type': 'text/plain'});
+  // ONLY handle the root path for health checks
+  // This guarantees we pass Replit's health checks
+  if (req.url === '/' || req.url === '') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('OK');
     return;
   }
-  
-  // For all other requests, try to serve static files
-  let filePath = req.url;
-  
-  // Default to index.html
-  if (filePath === '/') {
-    filePath = '/index.html';
+
+  // For all other paths, serve index.html
+  if (req.url === '/index.html') {
+    fs.readFile('./index.html', (err, content) => {
+      if (err) {
+        res.writeHead(500);
+        res.end('Internal Server Error');
+      } else {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(content);
+      }
+    });
+    return;
   }
-  
-  // Get absolute path
-  filePath = path.join(__dirname, filePath);
-  
-  // Handle static files
-  try {
-    if (fs.existsSync(filePath)) {
-      const content = fs.readFileSync(filePath);
-      const ext = path.extname(filePath);
-      
-      // Set content type based on file extension
-      let contentType = 'text/html';
-      if (ext === '.css') contentType = 'text/css';
-      if (ext === '.js') contentType = 'application/javascript';
-      if (ext === '.json') contentType = 'application/json';
-      if (ext === '.png') contentType = 'image/png';
-      if (ext === '.jpg' || ext === '.jpeg') contentType = 'image/jpeg';
-      if (ext === '.pdf') contentType = 'application/pdf';
-      if (ext === '.docx') contentType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-      
-      res.writeHead(200, {'Content-Type': contentType});
-      res.end(content);
-    } else {
-      // File not found, redirect to index.html
-      res.writeHead(302, {'Location': '/index.html'});
+
+  // Serve other files if they exist
+  fs.readFile('.' + req.url, (err, content) => {
+    if (err) {
+      res.writeHead(302, { 'Location': '/index.html' });
       res.end();
+    } else {
+      // Determine content type (simplified)
+      let contentType = 'text/plain';
+      if (req.url.endsWith('.html')) contentType = 'text/html';
+      if (req.url.endsWith('.css')) contentType = 'text/css';
+      if (req.url.endsWith('.js')) contentType = 'text/javascript';
+      if (req.url.endsWith('.png')) contentType = 'image/png';
+      if (req.url.endsWith('.jpg') || req.url.endsWith('.jpeg')) contentType = 'image/jpeg';
+      if (req.url.endsWith('.pdf')) contentType = 'application/pdf';
+      
+      res.writeHead(200, { 'Content-Type': contentType });
+      res.end(content);
     }
-  } catch (error) {
-    console.error('Error serving file:', error);
-    res.writeHead(500);
-    res.end('Internal Server Error');
-  }
+  });
 });
 
-// CRITICAL: Listen on port 5000
-const PORT = process.env.PORT || 5000;
+// Start server
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`
-=======================================================
-  SERVER RUNNING ON PORT ${PORT}
-=======================================================
-  - Root path (/) responding with "OK" for health checks
-  - All website content being served from static files
-  - Using pure Node.js HTTP server for maximum compatibility
-=======================================================
-  `);
+  console.log(`Replit health check server running on port ${PORT}`);
 });
