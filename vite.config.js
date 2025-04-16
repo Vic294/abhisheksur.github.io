@@ -1,19 +1,16 @@
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
-// GitHub Pages deployment requires the base path to match the repository name
-// Since this is a project site (username.github.io/repository), we need to specify the repo name
 export default defineConfig({
   plugins: [react()],
-  base: '/abhisheksur.github.io/',  // Match the repository name exactly
+  base: '/',
   build: {
     outDir: 'dist',
     emptyOutDir: true,
     sourcemap: false,
-    // Ensure assets are properly handled
     assetsInlineLimit: 0,
-    // Copy files from public directory to output directory
     copyPublicDir: true,
   },
   resolve: {
@@ -22,6 +19,9 @@ export default defineConfig({
       '@assets': path.resolve(__dirname, './src/assets'),
     },
   },
-  // Properly configure public directory
   publicDir: 'public',
+  server: {
+    host: '0.0.0.0',
+    port: 5173
+  }
 });
